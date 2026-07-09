@@ -12,3 +12,6 @@ en:
     close: "Close game"
     load_timeout: "The game is taking too long to load."
     open_new_tab: "Open in a new tab"
+  featured_games:
+    badge: "FEATURED"
+    title: "Games picked by the Wanaka team — play them right in the post"
