@@ -21,7 +21,10 @@ import { i18n } from "discourse-i18n";
 // subject to the `allowed_iframes` site setting, and Discourse's default CSP has
 // no frame-src restriction — no site-setting changes are required.
 
-const LOAD_TIMEOUT_MS = 12000;
+// Wanaka 3D games ship Three.js + assets through a two-hop iframe (/g meta-
+// refreshes to play.html), so `load` can legitimately fire late — keep the
+// guard generous and make it self-heal (see the load listener below).
+const LOAD_TIMEOUT_MS = 20000;
 
 // Stack of teardown callbacks for open frames; Esc pops the top only.
 const openFrames = [];
@@ -96,7 +99,12 @@ export default apiInitializer("1.8.0", (api) => {
       fallback.appendChild(open);
       wrap.appendChild(fallback);
     }, LOAD_TIMEOUT_MS);
-    iframe.addEventListener("load", () => clearTimeout(loadGuard));
+    iframe.addEventListener("load", () => {
+      clearTimeout(loadGuard);
+      // A slow game may outlive the guard and then finish — the frame has
+      // proven alive, so remove the fallback instead of covering a live game.
+      wrap.querySelector(".wanaka-play-fallback")?.remove();
+    });
 
     wrap.appendChild(close);
     wrap.appendChild(iframe);
