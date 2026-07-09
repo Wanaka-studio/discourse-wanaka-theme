@@ -1,0 +1,247 @@
+// Wanaka Discourse theme — brand overrides.
+//
+// The palette is defined by the "Wanaka Dark" color scheme in about.json and is
+// sourced from the ui-kit tokens (wanaka-ui-kit/tokens.css, the single source of
+// truth shared by studio / wanaka.app / the games storefront). Discourse derives
+// the SCSS color variables ($primary / $secondary / $tertiary / $quaternary /
+// $highlight / $danger / $success / $love) from that scheme, so this file reuses
+// those variables wherever one exists (DRY). Raw hex appears only for tokens the
+// Discourse scheme cannot carry (hover-state chain, surface ladder, alpha
+// overlays) — each is annotated with its ui-kit token name.
+//
+// tertiary   = #C0F000  --color-cta            (links & primary buttons)
+// quaternary = #67AC00  --color-cta-active     (pressed state / hard shadow)
+// secondary  = #140E10  --color-bg-base        (warm-black page background)
+
+:root {
+  --wanaka-brand: #{$tertiary};
+  --wanaka-bg: #{$secondary};
+}
+
+// ===== Typography — Poppins, self-hosted from theme assets (no external CDN).
+// ui-kit token: --font-family-base. "Press Start 2P" is logo-only; never use it
+// for headings or body text.
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url($poppins-400) format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url($poppins-500) format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url($poppins-600) format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url($poppins-700) format("woff2");
+}
+
+:root {
+  --font-family: Poppins, "PingFang SC", system-ui, sans-serif;
+  --heading-font-family: Poppins, "PingFang SC", system-ui, sans-serif;
+  // Wanaka has no formal mono token; this mirrors the ui-kit gallery's de-facto
+  // usage ('SF Mono', Menlo, monospace).
+  --d-font-family--monospace: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+// ===== Brand DNA: primary button = lime fill + dark label + hard bottom shadow,
+// pressed state sinks and swallows the shadow. Mirrors the site-wide button
+// spec (wanaka-world-site button-medium.css / web-consumer GameCard.css).
+// The dark label color is $secondary — identical to --color-cta-contrast.
+.btn-primary {
+  background: $tertiary;
+  color: $secondary;
+  border-radius: 12px; // Figma Button/Medium
+  font-weight: 600;
+  box-shadow: 0 3px 0 0 $quaternary; // --color-cta-active
+  transition: filter 0.12s ease, transform 0.04s ease, box-shadow 0.04s ease,
+    background 0.12s ease;
+
+  &:hover,
+  &:focus {
+    background: #a4cf1a; // --color-cta-hover (not carried by the scheme)
+    color: $secondary;
+  }
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: none;
+  }
+}
+
+.btn-danger {
+  border-radius: 12px;
+  box-shadow: 0 3px 0 0 #e03c2d; // --color-danger-hover
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: none;
+  }
+}
+
+// Focus ring (web-consumer global.css).
+:focus-visible {
+  outline: 2px solid $tertiary;
+}
+
+// Links use the brand accent; $tertiary is already #C0F000 from the scheme.
+a {
+  color: $tertiary;
+}
+
+// Visited topics: dim the accent so read/unread stays legible on dark.
+// Pre-computed dim of #C0F000 (sass darken() is deprecated and module
+// functions aren't guaranteed in Discourse's theme compiler).
+.topic-list .topic-list-item.visited a.title {
+  color: #7d9c00;
+}
+
+// ===== Header: same warm-black as the page; a 1px border supplies the
+// separation ($header_background == $secondary by design).
+.d-header {
+  border-bottom: 1px solid #423f3f; // --color-border
+}
+
+// ===== Card system — surface ladder from ui-kit:
+//   #222222 --color-bg-elevated (cards / modals)
+//   #272123 --color-bg-card     (hover rows / code)
+//   #423F3F --color-border
+//   radius 14px / shadow 0 6px 20px (web-consumer app-tokens.css)
+.d-modal__container,
+.user-card,
+.menu-panel {
+  background: #222222;
+  border: 1px solid #423f3f;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35); // --shadow-card
+}
+
+.topic-list-item:hover {
+  background: #272123; // --color-bg-card
+}
+
+// Code blocks.
+pre,
+pre code,
+:not(pre) > code {
+  background: #272123;
+  border: 1px solid #423f3f;
+  border-radius: 10px; // --radius-sm
+  color: #e6e6e6; // --color-fg-secondary
+}
+
+// Brand-green selection wash (ui-kit --color-overlay-brand-10). The Discourse
+// scheme fields cannot carry alpha, so this lives here.
+mark,
+.selected-post {
+  background: rgba(192, 240, 0, 0.1);
+}
+
+// ===== Wanaka footer (common/footer.html) =====
+.wanaka-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid rgba($tertiary, 0.15);
+  color: $primary-medium;
+  font-size: 0.9rem;
+
+  a {
+    color: $primary-medium;
+
+    &:hover {
+      color: $tertiary;
+    }
+  }
+}
+
+// ===== Game onebox → branded play card =====
+// (api-initializers/wanaka-game-onebox.js). Matches the storefront GameCard:
+// elevated surface, 14px radius, lime pill play button with the hard shadow.
+aside.onebox.wanaka-game-card {
+  background: #222222;
+  border: 1px solid #423f3f;
+  border-radius: 14px;
+}
+
+.wanaka-play-btn {
+  margin-top: 0.5rem;
+  border-radius: 999px; // pill, like the storefront card play button
+  box-shadow: 0 2px 0 0 $quaternary;
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: none;
+  }
+}
+
+.wanaka-play-wrap {
+  position: relative;
+  margin-top: 0.5rem;
+  aspect-ratio: 16 / 9;
+}
+
+.wanaka-play-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 10px;
+  background: #000;
+}
+
+.wanaka-play-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 2;
+  // Touch users have no Esc key — keep the target comfortably tappable.
+  min-width: 40px;
+  min-height: 40px;
+}
+
+// Timeout fallback shown when the game iframe fails to load (12s guard in
+// wanaka-game-onebox.js).
+.wanaka-play-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgba(10, 6, 7, 0.82); // --color-overlay-scrim
+  border-radius: 10px;
+  color: #e6e6e6;
+}
+
+// ===== Mobile =====
+@media (max-width: 640px) {
+  .wanaka-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  // Portrait phones: a 16:9 frame gets tiny — let the game breathe a bit more.
+  .wanaka-play-wrap {
+    aspect-ratio: 4 / 3;
+  }
+}

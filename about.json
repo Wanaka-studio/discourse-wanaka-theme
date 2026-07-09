@@ -1,0 +1,31 @@
+{
+  "name": "Wanaka",
+  "component": false,
+  "authors": "Wanaka",
+  "about_url": "https://wanaka.app",
+  "license_url": "https://github.com/Wanaka-studio/discourse-wanaka-theme/blob/main/LICENSE",
+  "theme_version": "0.2.0",
+  "minimum_discourse_version": "3.5.0",
+  "assets": {
+    "poppins-400": "assets/fonts/poppins-400.woff2",
+    "poppins-500": "assets/fonts/poppins-500.woff2",
+    "poppins-600": "assets/fonts/poppins-600.woff2",
+    "poppins-700": "assets/fonts/poppins-700.woff2"
+  },
+  "color_schemes": {
+    "Wanaka Dark": {
+      "primary": "FFFFFF",
+      "secondary": "140E10",
+      "tertiary": "C0F000",
+      "quaternary": "67AC00",
+      "header_background": "140E10",
+      "header_primary": "FFFFFF",
+      "highlight": "313D00",
+      "danger": "FF4837",
+      "success": "45D9A1",
+      "love": "FFC300",
+      "selected": "3A3536",
+      "hover": "272123"
+    }
+  }
+}

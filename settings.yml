@@ -1,0 +1,23 @@
+# Wanaka theme settings. Human-readable descriptions live in locales/en.yml
+# (theme_metadata.settings.*). All values are exposed to theme JS via the
+# `settings` global. NEVER hard-code a host in JS/HTML/SCSS — read it from here.
+
+game_share_host:
+  type: string
+  default: "play.wanaka.app"
+
+studio_url:
+  type: string
+  default: "https://studio.wanaka.app"
+
+games_url:
+  type: string
+  default: "https://wanaka.app/games"
+
+main_site_url:
+  type: string
+  default: "https://wanaka.app"
+
+guidelines_url:
+  type: string
+  default: "/guidelines"

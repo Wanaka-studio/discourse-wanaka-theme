@@ -1,0 +1,14 @@
+en:
+  theme_metadata:
+    description: "Wanaka brand dark theme for Discourse — ui-kit palette (#C0F000 on warm black), Poppins, branded footer, and a game-share onebox enhancement that plays Wanaka games in-post."
+    settings:
+      game_share_host: "Hostname (no scheme) that serves Wanaka game share links at /g/<id>, e.g. play.wanaka.app. Set this per environment (play.dev.wanaka.app / play.staging.wanaka.app / play.wanaka.app). The game onebox only enhances links whose host exactly matches this value."
+      studio_url: "URL of the Wanaka Studio editor. Used by the footer 'Studio' link."
+      games_url: "URL of the Wanaka games catalog."
+      main_site_url: "URL of the Wanaka main site. Used by the footer."
+      guidelines_url: "Target for the footer 'Community Guidelines' link. Defaults to this forum's built-in /guidelines page."
+  game_onebox:
+    play: "▶ Play"
+    close: "Close game"
+    load_timeout: "The game is taking too long to load."
+    open_new_tab: "Open in a new tab"
