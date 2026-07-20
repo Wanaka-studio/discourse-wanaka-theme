@@ -1,0 +1,27 @@
+zh_CN:
+  theme_metadata:
+    description: "Wanaka 游戏优先的 Discourse 主题：首页大幅封面墙、原生论坛列表与帖子内试玩。"
+    settings:
+      game_share_host: "提供 Wanaka 游戏分享链接 /g/<id> 的主机名（不含协议）。按环境填写 play.dev.wanaka.app、play.staging.wanaka.app 或 play.wanaka.app。"
+      featured_games_tag: "用于策划首页封面墙优先游戏的标签。"
+      game_showcase_category: "精选游戏不足时，用于补齐封面墙的分类 slug。"
+      studio_url: "Wanaka Studio 编辑器地址。"
+      games_url: "Wanaka 游戏目录地址。"
+      main_site_url: "Wanaka 主站地址。"
+      guidelines_url: "社区准则链接，默认使用论坛内置的 /guidelines 页面。"
+  game_onebox:
+    play: "▶ 试玩"
+    close: "关闭游戏"
+    load_timeout: "游戏加载时间过长。"
+    open_new_tab: "在新标签页打开"
+  featured_games:
+    eyebrow: "畅玩 WANAKA"
+    title: "发现下一款想玩的游戏"
+    subtitle: "探索 Wanaka 社区的新鲜世界，随时试玩、交流和分享。"
+    browse_all: "浏览全部游戏"
+    featured: "精选"
+    play: "游戏"
+    card_cta: "试玩并讨论"
+    community_eyebrow: "社区"
+    community_title: "继续聊聊这些游戏"
+    community_subtitle: "发布动态、开发日志、试玩反馈，以及围绕游戏的一切。"

@@ -1,7 +1,7 @@
 import { apiInitializer } from "discourse/lib/api";
 
-// Fill Wanaka brand-bar (common/header.html) and footer (common/footer.html)
-// link hrefs from theme settings, so no host is hard-coded in the HTML files.
+// Fill Wanaka footer (common/footer.html) link hrefs from theme settings, so no
+// host is hard-coded in the HTML file.
 // Each themed link carries a data-wanaka-href="<setting_key>" attribute; this
 // resolves it against the `settings` global (injected from settings.yml).
 //

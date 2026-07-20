@@ -1,8 +1,10 @@
 en:
   theme_metadata:
-    description: "Wanaka brand dark theme for Discourse — ui-kit palette (#C0F000 on warm black), Poppins, branded footer, and a game-share onebox enhancement that plays Wanaka games in-post."
+    description: "Wanaka's game-first Discourse theme — a cinematic cover wall above the native forum, plus in-post game play."
     settings:
       game_share_host: "Hostname (no scheme) that serves Wanaka game share links at /g/<id>, e.g. play.wanaka.app. Set this per environment (play.dev.wanaka.app / play.staging.wanaka.app / play.wanaka.app). The game onebox only enhances links whose host exactly matches this value."
+      featured_games_tag: "Tag used to curate the games at the front of the homepage cover wall."
+      game_showcase_category: "Category slug used to fill open cover-wall slots after featured games."
       studio_url: "URL of the Wanaka Studio editor. Used by the footer 'Studio' link."
       games_url: "URL of the Wanaka games catalog."
       main_site_url: "URL of the Wanaka main site. Used by the footer."
@@ -13,5 +15,13 @@ en:
     load_timeout: "The game is taking too long to load."
     open_new_tab: "Open in a new tab"
   featured_games:
-    badge: "FEATURED"
-    title: "Games picked by the Wanaka team — play them right in the post"
+    eyebrow: "PLAY WANAKA"
+    title: "Find your next game"
+    subtitle: "Fresh worlds from the Wanaka community, ready to play and discuss."
+    browse_all: "Browse all games"
+    featured: "FEATURED"
+    play: "GAME"
+    card_cta: "Play & discuss"
+    community_eyebrow: "COMMUNITY"
+    community_title: "Keep the conversation going"
+    community_subtitle: "Release notes, build logs, feedback, and everything around the games."
