@@ -55,7 +55,8 @@
   --heading-font-family: Poppins, "PingFang SC", system-ui, sans-serif;
   // Wanaka has no formal mono token; this mirrors the ui-kit gallery's de-facto
   // usage ('SF Mono', Menlo, monospace).
-  --d-font-family--monospace: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --d-font-family--monospace:
+    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 
 // ===== Brand DNA: primary button = lime fill + dark label + hard bottom shadow,
@@ -68,7 +69,10 @@
   border-radius: 12px; // Figma Button/Medium
   font-weight: 600;
   box-shadow: 0 3px 0 0 $quaternary; // --color-cta-active
-  transition: filter 0.12s ease, transform 0.04s ease, box-shadow 0.04s ease,
+  transition:
+    filter 0.12s ease,
+    transform 0.04s ease,
+    box-shadow 0.04s ease,
     background 0.12s ease;
 
   &:hover,
@@ -217,7 +221,7 @@ aside.onebox.wanaka-game-card {
   min-height: 40px;
 }
 
-// Timeout fallback shown when the game iframe fails to load (12s guard in
+// Timeout fallback shown when the game iframe fails to load (20s guard in
 // wanaka-game-onebox.js).
 .wanaka-play-fallback {
   position: absolute;
@@ -232,100 +236,448 @@ aside.onebox.wanaka-game-card {
   color: #e6e6e6;
 }
 
-// ===== Featured Games strip (api-initializers/wanaka-featured-games.js) =====
-// Blender-Artists-style curated banner in Wanaka clothes: horizontal cover
-// cards over the discovery list, lime badge, hard-shadow hover per the brand
-// button DNA.
-#wanaka-featured-strip {
-  margin: 8px 0 20px;
+// ===== Game cover wall (api-initializers/wanaka-featured-games.js) =====
+// The wall is deliberately much larger than a standard Discourse featured
+// strip: it owns roughly 70% of the first desktop viewport, then hands the page
+// back to the untouched forum discovery controls and topic list.
+#wanaka-game-wall {
+  --wanaka-wall-gap: 12px;
 
-  .wanaka-featured-head {
+  margin: 8px 0 32px;
+
+  .wanaka-game-wall-header {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 18px;
   }
 
-  .wanaka-featured-badge {
+  .wanaka-game-wall-copy {
+    min-width: 0;
+    max-width: 720px;
+  }
+
+  .wanaka-game-wall-eyebrow,
+  .wanaka-community-eyebrow {
+    display: block;
+    margin-bottom: 5px;
+    color: $tertiary;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    color: $secondary;
-    background: $tertiary;
-    border-radius: 999px;
-    padding: 2px 10px;
+    letter-spacing: 0.14em;
   }
 
-  .wanaka-featured-label {
-    font-weight: 600;
+  .wanaka-game-wall-title {
+    margin: 0;
     color: $primary;
+    font-size: clamp(30px, 3vw, 46px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
   }
 
-  .wanaka-featured-row {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding-bottom: 6px;
-    scrollbar-width: thin;
+  .wanaka-game-wall-subtitle {
+    margin: 8px 0 0;
+    color: $primary-medium;
+    font-size: 15px;
+    line-height: 1.5;
   }
 
-  .wanaka-featured-card {
-    flex: 0 0 200px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    text-decoration: none;
+  .wanaka-game-wall-browse {
+    flex: 0 0 auto;
+    padding: 10px 16px;
     border: 1px solid #423f3f; // --color-border
-    border-radius: 14px;
-    background: #222222; // --color-bg-elevated
-    padding: 8px;
-    transition: transform 0.12s ease, border-color 0.12s ease,
-      box-shadow 0.12s ease;
+    border-radius: 999px;
+    color: $primary;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background 0.12s ease,
+      border-color 0.12s ease,
+      color 0.12s ease,
+      transform 0.04s ease;
 
     &:hover {
-      transform: translateY(-2px);
       border-color: $tertiary;
-      box-shadow: 0 3px 0 0 $quaternary; // brand hard shadow
+      background: rgba($tertiary, 0.1);
+      color: $tertiary;
     }
 
     &:active {
-      transform: translateY(0);
+      transform: translateY(2px);
+    }
+
+    &::after {
+      content: " →";
+    }
+  }
+
+  .wanaka-game-wall-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: var(--wanaka-wall-gap);
+    height: clamp(560px, 72vh, 760px);
+
+    // Default nine-card bento: one 2x2 hero, four supporting covers on its
+    // right, and four covers spanning the full bottom row.
+    .wanaka-game-wall-card:nth-child(1) {
+      grid-column: 1 / 7;
+      grid-row: 1 / 3;
+    }
+
+    .wanaka-game-wall-card:nth-child(2) {
+      grid-column: 7 / 10;
+      grid-row: 1;
+    }
+
+    .wanaka-game-wall-card:nth-child(3) {
+      grid-column: 10 / 13;
+      grid-row: 1;
+    }
+
+    .wanaka-game-wall-card:nth-child(4) {
+      grid-column: 7 / 10;
+      grid-row: 2;
+    }
+
+    .wanaka-game-wall-card:nth-child(5) {
+      grid-column: 10 / 13;
+      grid-row: 2;
+    }
+
+    .wanaka-game-wall-card:nth-child(6) {
+      grid-column: 1 / 4;
+      grid-row: 3;
+    }
+
+    .wanaka-game-wall-card:nth-child(7) {
+      grid-column: 4 / 7;
+      grid-row: 3;
+    }
+
+    .wanaka-game-wall-card:nth-child(8) {
+      grid-column: 7 / 10;
+      grid-row: 3;
+    }
+
+    .wanaka-game-wall-card:nth-child(9) {
+      grid-column: 10 / 13;
+      grid-row: 3;
+    }
+  }
+
+  // Keep the composition intentional while the curated set grows. No count
+  // leaves an empty hole in the wall.
+  .wanaka-game-wall-grid--count-1 {
+    grid-template-rows: minmax(0, 1fr);
+    height: clamp(380px, 58vh, 620px);
+
+    .wanaka-game-wall-card:nth-child(1) {
+      grid-column: 1 / 13;
+      grid-row: 1;
+    }
+  }
+
+  .wanaka-game-wall-grid--count-2 {
+    grid-template-rows: minmax(0, 1fr);
+    height: clamp(380px, 58vh, 620px);
+
+    .wanaka-game-wall-card:nth-child(1) {
+      grid-column: 1 / 9;
+      grid-row: 1;
+    }
+
+    .wanaka-game-wall-card:nth-child(2) {
+      grid-column: 9 / 13;
+      grid-row: 1;
+    }
+  }
+
+  .wanaka-game-wall-grid--count-3 {
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    height: clamp(460px, 62vh, 660px);
+
+    .wanaka-game-wall-card:nth-child(1) {
+      grid-column: 1 / 9;
+      grid-row: 1 / 3;
+    }
+
+    .wanaka-game-wall-card:nth-child(2) {
+      grid-column: 9 / 13;
+      grid-row: 1;
+    }
+
+    .wanaka-game-wall-card:nth-child(3) {
+      grid-column: 9 / 13;
+      grid-row: 2;
+    }
+  }
+
+  .wanaka-game-wall-grid--count-4 {
+    .wanaka-game-wall-card:nth-child(1) {
+      grid-column: 1 / 8;
+      grid-row: 1 / 4;
+    }
+
+    .wanaka-game-wall-card:nth-child(2),
+    .wanaka-game-wall-card:nth-child(3),
+    .wanaka-game-wall-card:nth-child(4) {
+      grid-column: 8 / 13;
+    }
+
+    .wanaka-game-wall-card:nth-child(2) {
+      grid-row: 1;
+    }
+
+    .wanaka-game-wall-card:nth-child(3) {
+      grid-row: 2;
+    }
+
+    .wanaka-game-wall-card:nth-child(4) {
+      grid-row: 3;
+    }
+  }
+
+  .wanaka-game-wall-grid--count-5 {
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    height: clamp(480px, 64vh, 680px);
+  }
+
+  .wanaka-game-wall-grid--count-6 {
+    .wanaka-game-wall-card:nth-child(6) {
+      grid-column: 1 / 13;
+    }
+  }
+
+  .wanaka-game-wall-grid--count-7 {
+    .wanaka-game-wall-card:nth-child(6) {
+      grid-column: 1 / 7;
+    }
+
+    .wanaka-game-wall-card:nth-child(7) {
+      grid-column: 7 / 13;
+    }
+  }
+
+  .wanaka-game-wall-grid--count-8 {
+    .wanaka-game-wall-card:nth-child(6) {
+      grid-column: 1 / 5;
+    }
+
+    .wanaka-game-wall-card:nth-child(7) {
+      grid-column: 5 / 9;
+    }
+
+    .wanaka-game-wall-card:nth-child(8) {
+      grid-column: 9 / 13;
+    }
+  }
+
+  .wanaka-game-wall-card {
+    position: relative;
+    isolation: isolate;
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #423f3f; // --color-border
+    border-radius: 14px;
+    background: #222222; // --color-bg-elevated
+    color: $primary;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+    transition:
+      transform 0.14s ease,
+      border-color 0.14s ease,
+      box-shadow 0.14s ease;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        rgba(10, 6, 7, 0.02) 22%,
+        rgba(10, 6, 7, 0.46) 58%,
+        rgba(10, 6, 7, 0.94) 100%
+      );
+    }
+
+    &:hover {
+      z-index: 2;
+      border-color: $tertiary;
+      color: $primary;
+      transform: translateY(-3px);
+      box-shadow:
+        0 4px 0 $quaternary,
+        0 14px 30px rgba(0, 0, 0, 0.4);
+
+      .wanaka-game-wall-media img {
+        transform: scale(1.045);
+      }
+
+      .wanaka-game-wall-card-cta {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    &:active {
+      transform: translateY(1px);
       box-shadow: none;
     }
   }
 
-  .wanaka-featured-cover {
-    aspect-ratio: 16 / 9;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #272123; // --color-bg-card
+  .wanaka-game-wall-media {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
+      transform: scale(1.001);
+      transition: transform 0.3s ease;
     }
   }
 
-  .wanaka-featured-mono {
-    font-size: 34px;
-    font-weight: 700;
-    color: $tertiary;
+  .wanaka-game-wall-media--placeholder {
+    background:
+      radial-gradient(
+        circle at 18% 22%,
+        rgba($tertiary, 0.28),
+        transparent 36%
+      ),
+      radial-gradient(
+        circle at 84% 76%,
+        rgba(103, 172, 0, 0.2),
+        transparent 40%
+      ),
+      #272123; // --color-bg-card
   }
 
-  .wanaka-featured-title {
-    font-size: 13.5px;
-    font-weight: 600;
-    line-height: 1.35;
-    color: $primary;
+  .wanaka-game-wall-monogram {
+    color: $tertiary;
+    font-size: clamp(54px, 8vw, 112px);
+    font-weight: 700;
+    opacity: 0.78;
+  }
+
+  .wanaka-game-wall-content {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    left: 16px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    pointer-events: none;
+  }
+
+  .wanaka-game-wall-card-label {
+    display: inline-flex;
+    margin-bottom: 7px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: $tertiary;
+    color: $secondary;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
+  }
+
+  .wanaka-game-wall-card-title {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
     overflow: hidden;
+    color: $primary;
+    font-size: clamp(14px, 1.25vw, 18px);
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .wanaka-game-wall-card--hero {
+    .wanaka-game-wall-content {
+      right: 24px;
+      bottom: 22px;
+      left: 24px;
+    }
+
+    .wanaka-game-wall-card-label {
+      margin-bottom: 10px;
+      padding: 5px 11px;
+      font-size: 10px;
+    }
+
+    .wanaka-game-wall-card-title {
+      max-width: 92%;
+      font-size: clamp(26px, 3vw, 42px);
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+    }
+  }
+
+  .wanaka-game-wall-card-cta {
+    margin-top: 9px;
+    color: $tertiary;
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 0.14s ease,
+      transform 0.14s ease;
+
+    &::after {
+      content: " →";
+    }
+  }
+
+  .wanaka-community-intro {
+    display: grid;
+    grid-template-columns: minmax(120px, 0.22fr) 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px solid #423f3f; // --color-border
+  }
+
+  .wanaka-community-title {
+    margin: 0;
+    color: $primary;
+    font-size: clamp(22px, 2.2vw, 30px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .wanaka-community-subtitle {
+    margin: 5px 0 0;
+    color: $primary-medium;
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #wanaka-game-wall {
+    .wanaka-game-wall-browse,
+    .wanaka-game-wall-card,
+    .wanaka-game-wall-media img,
+    .wanaka-game-wall-card-cta {
+      transition: none;
+    }
   }
 }
 
@@ -340,5 +692,97 @@ aside.onebox.wanaka-game-card {
   // Portrait phones: a 16:9 frame gets tiny — let the game breathe a bit more.
   .wanaka-play-wrap {
     aspect-ratio: 4 / 3;
+  }
+
+  #wanaka-game-wall {
+    --wanaka-wall-gap: 10px;
+
+    margin-top: 4px;
+    margin-bottom: 24px;
+
+    .wanaka-game-wall-header {
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .wanaka-game-wall-title {
+      font-size: clamp(27px, 8.5vw, 36px);
+    }
+
+    .wanaka-game-wall-subtitle {
+      font-size: 13px;
+    }
+
+    .wanaka-game-wall-browse {
+      padding: 8px 11px;
+      font-size: 0;
+
+      &::after {
+        content: "→";
+        font-size: 17px;
+      }
+    }
+
+    .wanaka-game-wall-grid,
+    .wanaka-game-wall-grid--count-1,
+    .wanaka-game-wall-grid--count-2,
+    .wanaka-game-wall-grid--count-3,
+    .wanaka-game-wall-grid--count-4,
+    .wanaka-game-wall-grid--count-5 {
+      display: flex;
+      height: auto;
+      overflow-x: auto;
+      padding: 2px 2px 10px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+      overscroll-behavior-x: contain;
+    }
+
+    .wanaka-game-wall-card,
+    .wanaka-game-wall-card:nth-child(n) {
+      flex: 0 0 min(72vw, 320px);
+      aspect-ratio: 4 / 3;
+      scroll-snap-align: start;
+    }
+
+    .wanaka-game-wall-card--hero,
+    .wanaka-game-wall-card--hero:nth-child(1) {
+      flex-basis: min(86vw, 380px);
+      aspect-ratio: 16 / 11;
+
+      .wanaka-game-wall-content {
+        right: 18px;
+        bottom: 17px;
+        left: 18px;
+      }
+
+      .wanaka-game-wall-card-title {
+        font-size: clamp(22px, 7vw, 30px);
+      }
+    }
+
+    .wanaka-game-wall-card-cta {
+      opacity: 1;
+      transform: none;
+    }
+
+    .wanaka-community-intro {
+      display: block;
+      margin-top: 22px;
+      padding-top: 20px;
+    }
+
+    .wanaka-community-eyebrow {
+      margin-bottom: 8px;
+    }
+
+    .wanaka-community-title {
+      font-size: 24px;
+    }
+
+    .wanaka-community-subtitle {
+      line-height: 1.45;
+    }
   }
 }

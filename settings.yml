@@ -6,6 +6,14 @@ game_share_host:
   type: string
   default: "play.wanaka.app"
 
+featured_games_tag:
+  type: string
+  default: "featured"
+
+game_showcase_category:
+  type: string
+  default: "game-showcase"
+
 studio_url:
   type: string
   default: "https://studio.wanaka.app"

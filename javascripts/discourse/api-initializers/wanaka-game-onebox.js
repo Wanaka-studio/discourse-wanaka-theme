@@ -14,7 +14,7 @@ import { i18n } from "discourse-i18n";
 //   - `allow` list copied verbatim (autoplay/fullscreen/gamepad/... with `*`)
 //   - NEVER auto-mount: the iframe is created only on click (one page may hold
 //     many game cards)
-//   - 12s load timeout → scrim with an "open in new tab" fallback
+//   - 20s load timeout → scrim with an "open in new tab" fallback
 //   - Esc closes the most recently opened frame only; ✕ closes its own
 //
 // The client-injected iframe is NOT part of the post's cooked HTML, so it is not
@@ -58,7 +58,7 @@ export default apiInitializer("1.8.0", (api) => {
     iframe.src = gUrl;
     iframe.setAttribute(
       "allow",
-      "autoplay *; fullscreen *; gamepad *; accelerometer *; gyroscope *; pointer-lock *"
+      "autoplay *; fullscreen *; gamepad *; accelerometer *; gyroscope *; pointer-lock *",
     );
     iframe.setAttribute("loading", "lazy");
 
@@ -80,7 +80,7 @@ export default apiInitializer("1.8.0", (api) => {
     bindEscOnce();
 
     // Load guard: a cross-origin frame denied by frame-ancestors (or a dead
-    // link) renders as a silent black box — after 12s offer an escape hatch.
+    // link) renders as a silent black box — after 20s offer an escape hatch.
     const loadGuard = setTimeout(() => {
       if (wrap.querySelector(".wanaka-play-fallback")) {
         return;
@@ -147,6 +147,6 @@ export default apiInitializer("1.8.0", (api) => {
         card.appendChild(btn);
       });
     },
-    { id: "wanaka-game-onebox", onlyStream: true }
+    { id: "wanaka-game-onebox", onlyStream: true },
   );
 });
