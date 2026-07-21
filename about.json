@@ -4,7 +4,7 @@
   "authors": "Wanaka",
   "about_url": "https://wanaka.app",
   "license_url": "https://github.com/Wanaka-studio/discourse-wanaka-theme/blob/main/LICENSE",
-  "theme_version": "0.6.1",
+  "theme_version": "0.6.2",
   "minimum_discourse_version": "3.5.0",
   "assets": {
     "poppins-400": "assets/fonts/poppins-400.woff2",

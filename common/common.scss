@@ -239,6 +239,12 @@ aside.onebox.wanaka-game-card {
 // ===== Full-viewport game poster rail =====
 // (api-initializers/wanaka-featured-games.js). The first screen belongs to the
 // games; the native forum remains in its normal-width container underneath.
+html.wanaka-game-wall-pending {
+  #main-outlet {
+    visibility: hidden;
+  }
+}
+
 @keyframes wanaka-game-wall-marquee {
   from {
     transform: translate3d(0, 0, 0);

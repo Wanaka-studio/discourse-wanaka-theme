@@ -21,6 +21,13 @@ const MOUNT_RETRY_MS = 80;
 
 let renderGeneration = 0;
 
+function setHomepagePending(pending) {
+  document.documentElement.classList.toggle(
+    "wanaka-game-wall-pending",
+    pending && isHomepage(),
+  );
+}
+
 function isHomepage() {
   return window.location.pathname.replace(/\/+$/, "") === "";
 }
@@ -260,11 +267,17 @@ async function renderWall() {
   const generation = ++renderGeneration;
   document.getElementById(WALL_ID)?.remove();
   if (!isHomepage()) {
+    setHomepagePending(false);
     return;
   }
 
+  setHomepagePending(true);
+
   const topics = await loadWallTopics();
   if (topics.length === 0 || generation !== renderGeneration || !isHomepage()) {
+    if (generation === renderGeneration) {
+      setHomepagePending(false);
+    }
     return;
   }
 
@@ -276,14 +289,22 @@ async function renderWall() {
         document.getElementById(WALL_ID) ||
         !isHomepage()
       ) {
+        if (generation === renderGeneration) {
+          setHomepagePending(false);
+        }
         return;
       }
 
       outlet.prepend(buildWall(topics));
+      setHomepagePending(false);
       return;
     }
 
     await new Promise((resolve) => setTimeout(resolve, MOUNT_RETRY_MS));
+  }
+
+  if (generation === renderGeneration) {
+    setHomepagePending(false);
   }
 }
 
