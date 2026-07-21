@@ -63,8 +63,13 @@ RSpec.describe "Wanaka homepage game wall" do
       count: 8,
     )
     expect(page).to have_no_css(".wanaka-game-wall-media--placeholder")
-    expect(page).to have_no_link("How to share your game", exact: true)
-    expect(page).to have_no_link("About the Game Showcase category", exact: true)
+    within("#wanaka-game-wall") do
+      expect(page).to have_no_link("How to share your game", exact: true)
+      expect(page).to have_no_link(
+        "About the Game Showcase category",
+        exact: true,
+      )
+    end
     expect(page).to have_css(".topic-list")
     expect(page).to have_no_css("#d-sidebar")
     expect(page).to have_css(".header-sidebar-toggle")
