@@ -123,7 +123,7 @@ RSpec.describe "Wanaka homepage game wall" do
     expect(layout["animationName"]).to eq("wanaka-game-wall-marquee")
     expect(layout["duration"]).to eq("144s")
     expect(layout["groupDisplay"]).to eq("grid")
-    expect(layout["groupRows"]).to eq(4)
+    expect(layout["groupRows"]).to eq(3)
     expect(layout["heroHeight"]).to be > layout["supportHeight"]
 
     find(".header-sidebar-toggle").click
