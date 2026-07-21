@@ -403,9 +403,9 @@ html.wanaka-game-wall-pending {
     height: clamp(620px, 72svh, 760px);
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: repeat(3, minmax(0, 1fr));
-    padding-left: var(--wanaka-wall-gap);
+    padding-left: 0;
     flex: none;
-    gap: var(--wanaka-wall-gap);
+    gap: 0;
   }
 
   .wanaka-game-wall-card {
@@ -414,7 +414,7 @@ html.wanaka-game-wall-pending {
     display: block;
     overflow: hidden;
     border: 1px solid #423f3f; // --color-border
-    border-radius: clamp(16px, 1.4vw, 24px);
+    border-radius: 0;
     min-width: 0;
     min-height: 0;
     aspect-ratio: auto;
@@ -526,9 +526,9 @@ html.wanaka-game-wall-pending {
 
   .wanaka-game-wall-content {
     position: absolute;
-    right: clamp(22px, 3vw, 48px);
-    bottom: clamp(20px, 3vw, 44px);
-    left: clamp(22px, 3vw, 48px);
+    right: clamp(20px, 2.5vw, 36px);
+    bottom: clamp(18px, 2.5vw, 32px);
+    left: clamp(20px, 2.5vw, 36px);
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -554,17 +554,17 @@ html.wanaka-game-wall-pending {
     max-width: 90%;
     overflow: hidden;
     color: $primary;
-    font-size: clamp(20px, 2vw, 32px);
+    font-size: clamp(17px, 1.5vw, 26px);
     font-weight: 700;
     line-height: 1.04;
     letter-spacing: -0.035em;
     text-shadow: 0 3px 18px rgba(0, 0, 0, 0.76);
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
   }
 
   .wanaka-game-wall-card:first-child .wanaka-game-wall-card-title {
-    font-size: clamp(30px, 3.4vw, 54px);
+    font-size: clamp(24px, 2.6vw, 40px);
   }
 
   .wanaka-game-wall-card-cta {
@@ -717,7 +717,7 @@ html.wanaka-game-wall-pending {
       min-width: 0;
       min-height: 0;
       aspect-ratio: auto;
-      border-radius: 18px;
+      border-radius: 0;
     }
 
     .wanaka-game-wall-content {
@@ -728,11 +728,11 @@ html.wanaka-game-wall-pending {
 
     .wanaka-game-wall-card-title {
       max-width: 100%;
-      font-size: clamp(17px, 4vw, 28px);
+      font-size: clamp(16px, 3.5vw, 23px);
     }
 
     .wanaka-game-wall-card:first-child .wanaka-game-wall-card-title {
-      font-size: clamp(25px, 7vw, 34px);
+      font-size: clamp(22px, 6vw, 30px);
     }
 
     .wanaka-community-intro {
