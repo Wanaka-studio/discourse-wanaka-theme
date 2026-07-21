@@ -4,7 +4,7 @@ en:
     settings:
       game_share_host: "Hostname (no scheme) that serves Wanaka game share links at /g/<id>, e.g. play.wanaka.app. Set this per environment (play.dev.wanaka.app / play.staging.wanaka.app / play.wanaka.app). The game onebox only enhances links whose host exactly matches this value."
       featured_games_tag: "Tag used to curate the games at the front of the homepage cover wall."
-      game_showcase_category: "Category slug used to fill open cover-wall slots after featured games."
+      game_showcase_category: "Category slug supplying cover-bearing games after featured games. Topics without a cover are excluded."
       studio_url: "URL of the Wanaka Studio editor. Used by the footer 'Studio' link."
       games_url: "URL of the Wanaka games catalog."
       main_site_url: "URL of the Wanaka main site. Used by the footer."

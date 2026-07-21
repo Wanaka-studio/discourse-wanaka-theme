@@ -3,17 +3,19 @@ import { i18n } from "discourse-i18n";
 
 // A game-first homepage for Wanaka Community.
 //
-// Staff curate the lead items with the configured featured tag. If fewer than
-// nine topics are featured, the wall fills the remaining slots from the
-// configured Game Showcase category. The existing Discourse discovery controls
-// and topic list stay untouched immediately below this section.
+// Staff curate the lead items with the configured featured tag. The remaining
+// games come from the configured Game Showcase category. Only topics with a
+// real image are eligible, which keeps category guides and other discussion
+// topics out of the poster rail. The native forum stays untouched below it.
 //
-// The wall is injected only on `/`. Discourse can rebuild #main-outlet after a
+// The rail is injected only on `/`. Discourse can rebuild #main-outlet after a
 // route transition, so every render is generation-guarded and briefly retries
 // the mount point. Navigating away invalidates any in-flight request.
 
 const WALL_ID = "wanaka-game-wall";
-const MAX_CARDS = 9;
+const MAX_GAMES = 24;
+const MIN_LOOP_SECONDS = 96;
+const SECONDS_PER_GAME = 18;
 const MOUNT_RETRIES = 8;
 const MOUNT_RETRY_MS = 80;
 
@@ -61,13 +63,15 @@ async function loadWallTopics() {
   const topics = [];
   const seenIds = new Set();
   for (const topic of [...featured, ...showcase]) {
-    if (!topic?.id || seenIds.has(topic.id)) {
+    const hasCover =
+      typeof topic?.image_url === "string" && topic.image_url.trim().length > 0;
+    if (!topic?.id || !hasCover || seenIds.has(topic.id)) {
       continue;
     }
 
     seenIds.add(topic.id);
     topics.push(topic);
-    if (topics.length === MAX_CARDS) {
+    if (topics.length === MAX_GAMES) {
       break;
     }
   }
@@ -79,35 +83,42 @@ function topicPath(topic) {
   return `/t/${encodeURIComponent(topic.slug || "topic")}/${topic.id}`;
 }
 
-function buildCard(topic, index) {
+function topicHasTag(topic, tagSlug) {
+  if (!tagSlug) {
+    return false;
+  }
+
+  return (topic.tags || []).some((tag) => {
+    if (typeof tag === "string") {
+      return tag === tagSlug;
+    }
+
+    return tag?.slug === tagSlug || tag?.name === tagSlug;
+  });
+}
+
+function buildCard(topic, index, featuredTag, isClone = false) {
   const card = document.createElement("a");
   card.className = "wanaka-game-wall-card";
   card.href = topicPath(topic);
   card.setAttribute("role", "listitem");
   card.setAttribute("aria-label", topic.title);
-  if (index === 0) {
-    card.classList.add("wanaka-game-wall-card--hero");
+  if (isClone) {
+    card.tabIndex = -1;
   }
 
   const media = document.createElement("span");
   media.className = "wanaka-game-wall-media";
-  if (topic.image_url) {
-    const image = document.createElement("img");
-    image.src = topic.image_url;
-    image.alt = "";
-    image.decoding = "async";
-    image.loading = index < 3 ? "eager" : "lazy";
-    if (index === 0) {
-      image.fetchPriority = "high";
-    }
-    media.appendChild(image);
-  } else {
-    media.classList.add("wanaka-game-wall-media--placeholder");
-    const monogram = document.createElement("span");
-    monogram.className = "wanaka-game-wall-monogram";
-    monogram.textContent = (topic.title || "?").slice(0, 1).toUpperCase();
-    media.appendChild(monogram);
+
+  const image = document.createElement("img");
+  image.src = topic.image_url;
+  image.alt = "";
+  image.decoding = "async";
+  image.loading = !isClone && index < 2 ? "eager" : "lazy";
+  if (!isClone && index === 0) {
+    image.fetchPriority = "high";
   }
+  media.appendChild(image);
 
   const content = document.createElement("span");
   content.className = "wanaka-game-wall-content";
@@ -116,7 +127,9 @@ function buildCard(topic, index) {
   label.className = "wanaka-game-wall-card-label";
   label.textContent = i18n(
     themePrefix(
-      index === 0 ? "featured_games.featured" : "featured_games.play",
+      topicHasTag(topic, featuredTag)
+        ? "featured_games.featured"
+        : "featured_games.play",
     ),
   );
 
@@ -195,18 +208,51 @@ function buildCommunityIntro() {
   return intro;
 }
 
+function buildGameGroup(topics, featuredTag, isClone = false) {
+  const group = document.createElement("div");
+  group.className = isClone
+    ? "wanaka-game-wall-group wanaka-game-wall-group--clone"
+    : "wanaka-game-wall-group wanaka-game-wall-group--primary";
+
+  if (isClone) {
+    group.setAttribute("aria-hidden", "true");
+  } else {
+    group.setAttribute("role", "list");
+  }
+
+  topics.forEach((topic, index) =>
+    group.appendChild(buildCard(topic, index, featuredTag, isClone)),
+  );
+  return group;
+}
+
+function buildRail(topics) {
+  const viewport = document.createElement("div");
+  viewport.className = "wanaka-game-wall-viewport";
+
+  const track = document.createElement("div");
+  track.className = "wanaka-game-wall-track";
+  const duration = Math.max(MIN_LOOP_SECONDS, topics.length * SECONDS_PER_GAME);
+  track.style.setProperty("--wanaka-wall-duration", `${duration}s`);
+
+  const featuredTag = settings.featured_games_tag?.trim();
+  track.appendChild(buildGameGroup(topics, featuredTag));
+  track.appendChild(buildGameGroup(topics, featuredTag, true));
+  viewport.appendChild(track);
+  return viewport;
+}
+
 function buildWall(topics) {
   const wall = document.createElement("section");
   wall.id = WALL_ID;
   wall.setAttribute("aria-labelledby", "wanaka-game-wall-title");
 
-  const grid = document.createElement("div");
-  grid.className = `wanaka-game-wall-grid wanaka-game-wall-grid--count-${topics.length}`;
-  grid.setAttribute("role", "list");
-  topics.forEach((topic, index) => grid.appendChild(buildCard(topic, index)));
+  const stage = document.createElement("div");
+  stage.className = "wanaka-game-wall-stage";
+  stage.appendChild(buildHeader());
+  stage.appendChild(buildRail(topics));
 
-  wall.appendChild(buildHeader());
-  wall.appendChild(grid);
+  wall.appendChild(stage);
   wall.appendChild(buildCommunityIntro());
   return wall;
 }
