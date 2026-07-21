@@ -63,6 +63,7 @@ RSpec.describe "Wanaka homepage game wall" do
       count: 8,
     )
     expect(page).to have_no_css(".wanaka-game-wall-media--placeholder")
+    expect(page).to have_no_css(".wanaka-community-intro")
     within("#wanaka-game-wall") do
       expect(page).to have_no_link("How to share your game", exact: true)
       expect(page).to have_no_link(
@@ -96,6 +97,8 @@ RSpec.describe "Wanaka homepage game wall" do
           const wall = document.querySelector("#wanaka-game-wall").getBoundingClientRect();
           const topicList = document.querySelector(".topic-list").getBoundingClientRect();
           const track = document.querySelector(".wanaka-game-wall-track");
+          const group = document.querySelector(".wanaka-game-wall-group--primary");
+          const cards = Array.from(group.querySelectorAll(".wanaka-game-wall-card"));
           return {
             stageLeft: stage.left,
             stageWidth: stage.width,
@@ -106,6 +109,10 @@ RSpec.describe "Wanaka homepage game wall" do
             topicListTop: topicList.top,
             animationName: getComputedStyle(track).animationName,
             duration: track.style.getPropertyValue("--wanaka-wall-duration"),
+            groupDisplay: getComputedStyle(group).display,
+            groupRows: getComputedStyle(group).gridTemplateRows.split(" ").length,
+            heroHeight: cards[0].getBoundingClientRect().height,
+            supportHeight: cards[1].getBoundingClientRect().height,
           };
         })()
       JS
@@ -115,6 +122,9 @@ RSpec.describe "Wanaka homepage game wall" do
     expect(layout["wallBottom"]).to be <= layout["topicListTop"]
     expect(layout["animationName"]).to eq("wanaka-game-wall-marquee")
     expect(layout["duration"]).to eq("144s")
+    expect(layout["groupDisplay"]).to eq("grid")
+    expect(layout["groupRows"]).to eq(3)
+    expect(layout["heroHeight"]).to be > layout["supportHeight"]
 
     find(".header-sidebar-toggle").click
     expect(page).to have_css("#d-sidebar")

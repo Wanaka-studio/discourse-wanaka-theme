@@ -253,7 +253,6 @@ function buildWall(topics) {
   stage.appendChild(buildRail(topics));
 
   wall.appendChild(stage);
-  wall.appendChild(buildCommunityIntro());
   return wall;
 }
 
