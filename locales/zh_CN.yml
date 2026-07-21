@@ -4,7 +4,7 @@ zh_CN:
     settings:
       game_share_host: "提供 Wanaka 游戏分享链接 /g/<id> 的主机名（不含协议）。按环境填写 play.dev.wanaka.app、play.staging.wanaka.app 或 play.wanaka.app。"
       featured_games_tag: "用于策划首页封面墙优先游戏的标签。"
-      game_showcase_category: "精选游戏不足时，用于补齐封面墙的分类 slug。"
+      game_showcase_category: "用于在精选游戏之后提供带封面游戏的分类 slug；无封面主题不会展示。"
       studio_url: "Wanaka Studio 编辑器地址。"
       games_url: "Wanaka 游戏目录地址。"
       main_site_url: "Wanaka 主站地址。"

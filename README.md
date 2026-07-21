@@ -10,17 +10,18 @@ self-hosted Discourse forum and turns pasted Wanaka game-share links
 
 ## Contents
 
-| File                                                              | Purpose                                                                                           |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `about.json`                                                      | Full theme (`"component": false`) + the `Wanaka Dark` color scheme.                               |
-| `settings.yml`                                                    | Theme settings (game source, game-share host + brand link URLs). No host is hard-coded elsewhere. |
-| `locales/en.yml`, `locales/zh_CN.yml`                             | English and Simplified Chinese UI copy, metadata, and setting descriptions.                       |
-| `common/common.scss`                                              | Dark brand SCSS (buttons, links, game wall, footer, game card).                                   |
-| `common/footer.html`                                              | Wanaka footer (main site / Studio / Community Guidelines).                                        |
-| `javascripts/discourse/api-initializers/wanaka-featured-games.js` | Large curated game-cover wall above the native homepage forum.                                    |
-| `javascripts/discourse/api-initializers/wanaka-game-onebox.js`    | Game onebox → "Play" button + in-post iframe.                                                     |
-| `javascripts/discourse/api-initializers/wanaka-branding.js`       | Fills footer link hrefs from theme settings.                                                      |
-| `assets/wanaka-logo.svg`                                          | Placeholder wordmark (replace with the official logo).                                            |
+| File                                                               | Purpose                                                                                           |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| `about.json`                                                       | Full theme (`"component": false`) + the `Wanaka Dark` color scheme.                               |
+| `settings.yml`                                                     | Theme settings (game source, game-share host + brand link URLs). No host is hard-coded elsewhere. |
+| `locales/en.yml`, `locales/zh_CN.yml`                              | English and Simplified Chinese UI copy, metadata, and setting descriptions.                       |
+| `common/common.scss`                                               | Dark brand SCSS (buttons, links, full-screen poster rail, footer, game card).                     |
+| `common/footer.html`                                               | Wanaka footer (main site / Studio / Community Guidelines).                                        |
+| `javascripts/discourse/api-initializers/wanaka-featured-games.js`  | Full-viewport, auto-scrolling game-poster rail above the native homepage forum.                   |
+| `javascripts/discourse/api-initializers/wanaka-default-sidebar.js` | Collapses the sidebar once by default, while preserving later user choices.                       |
+| `javascripts/discourse/api-initializers/wanaka-game-onebox.js`     | Game onebox → "Play" button + in-post iframe.                                                     |
+| `javascripts/discourse/api-initializers/wanaka-branding.js`        | Fills footer link hrefs from theme settings.                                                      |
+| `assets/wanaka-logo.svg`                                           | Placeholder wordmark (replace with the official logo).                                            |
 
 ## Install
 
@@ -57,7 +58,7 @@ available.
 | ------------------------ | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `game_share_host`        | `play.wanaka.app`           | Host (no scheme) serving `/g/<id>`. **Set per environment** (`play.dev.wanaka.app` / `play.staging.wanaka.app` / `play.wanaka.app`). The onebox only enhances links whose host matches exactly. |
 | `featured_games_tag`     | `featured`                  | Topics carrying this tag lead the homepage game wall.                                                                                                                                           |
-| `game_showcase_category` | `game-showcase`             | Category slug used to fill the wall to nine games after curated topics.                                                                                                                         |
+| `game_showcase_category` | `game-showcase`             | Category slug supplying cover-bearing games after curated topics. Topics without a cover are excluded.                                                                                          |
 | `studio_url`             | `https://studio.wanaka.app` | Footer "Studio" link.                                                                                                                                                                           |
 | `games_url`              | `https://wanaka.app/games`  | Game-wall "Browse all games" link.                                                                                                                                                              |
 | `main_site_url`          | `https://wanaka.app`        | Logo / footer link.                                                                                                                                                                             |
@@ -66,21 +67,22 @@ available.
 ## Homepage game wall
 
 The homepage keeps Discourse's native discovery controls and topic list, but
-adds a game-first layer above them:
+gives the first viewport to a game-first poster rail:
 
-1. Up to nine topics carrying `featured_games_tag` are placed first.
-2. Empty positions are filled from `game_showcase_category`, with duplicates
-   removed.
-3. The first game becomes a 2×2 hero; supporting games form a three-row bento
-   wall that occupies roughly 70% of the first desktop viewport.
-4. Sets of one through eight games receive dedicated no-gap compositions.
-5. On phones, the wall becomes a horizontal snap carousel so the forum remains
-   quick to reach.
+1. Topics carrying `featured_games_tag` lead the rail.
+2. More games come from `game_showcase_category`, with duplicates removed.
+3. Only topics with a real `image_url` are eligible. Category guides and normal
+   posts without covers never become posters.
+4. A duplicated, `aria-hidden` copy produces a seamless horizontal loop. The
+   speed scales with the game count, pauses on hover/focus, and falls back to a
+   manual snap rail when the OS requests reduced motion.
+5. The stage spans the full viewport width and height; the Community hand-off
+   and unmodified native forum remain immediately below it.
 
-The wall uses each topic's `image_url` (normally the first image in its first
-post). A branded monogram fills any topic that has no image. Cards open their
-Game Showcase topics, where the existing game onebox can launch the playable
-build and the normal Discourse discussion remains available.
+Cards open their Game Showcase topics, where the existing game onebox can launch
+the playable build and the normal Discourse discussion remains available. The
+Discourse sidebar is collapsed on the browser's first visit after installing
+this version; opening it again remains a normal persisted user preference.
 
 ## Change the brand color
 
@@ -142,6 +144,16 @@ verify against your Discourse version + real cross-origin setup:
   branches for different Discourse versions.
 - **Logo** in `assets/wanaka-logo.svg` is a placeholder wordmark — replace it
   with the official Wanaka logo.
+
+## 0.5.0 (2026-07-21)
+
+- Replaced the static bento grid with a full-viewport, seamless, slow-moving
+  horizontal game-poster rail.
+- Excluded every topic without a real cover image, so instructions and ordinary
+  posts cannot enter the poster wall.
+- Made the sidebar collapsed by default once per browser while preserving the
+  user's subsequent toggle preference.
+- Added pause-on-hover/focus and reduced-motion behavior.
 
 ## 0.4.0 (2026-07-20)
 
